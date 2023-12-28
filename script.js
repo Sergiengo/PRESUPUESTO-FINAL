@@ -81,7 +81,33 @@ function mostrarPresupuestos(mes) {
 
     let presupuestosFiltrados = presupuestos;
     if (mes !== null && mes !== '') {
-        presupuestosFiltrados = presupuestos.filter(presupuesto => new Date(presupuesto.fechaCreacion).getMonth().toString() === mes);
+        presupuestosFiltrados = presupuestos.filter(p => new Date(p.fechaCreacion).getMonth().toString() === mes);
+    }
+
+    presupuestosFiltrados.forEach((presupuesto, index) => {
+        const fila = tablaPresupuestos.insertRow();
+        fila.insertCell(0).textContent = presupuesto.nombre;
+        fila.insertCell(1).textContent = `${presupuesto.montoOriginal.toFixed(2)}€`;
+
+        const celdaCantidadRestante = fila.insertCell(2);
+        celdaCantidadRestante.textContent = `${presupuesto.montoRestante.toFixed(2)}€`;
+        // ... configuración de colores ...
+
+        const celdaFecha = fila.insertCell(3);
+        celdaFecha.innerHTML = `<input type="date" value="${presupuesto.fechaCreacion}" onchange="cambiarFechaPresupuesto(${index}, this.value)" />`;
+
+        const celdaEliminar = fila.insertCell(4);
+        celdaEliminar.innerHTML = `<button onclick="eliminarPresupuesto(${index})">Eliminar</button>`;
+    });
+}
+
+function mostrarPresupuestos(mes) {
+    const tablaPresupuestos = document.getElementById('tabla-presupuestos').getElementsByTagName('tbody')[0];
+    tablaPresupuestos.innerHTML = '';
+
+    let presupuestosFiltrados = presupuestos;
+    if (mes !== null && mes !== '') {
+        presupuestosFiltrados = presupuestos.filter(p => new Date(p.fechaCreacion).getMonth().toString() === mes);
     }
 
     presupuestosFiltrados.forEach((presupuesto, index) => {
@@ -92,41 +118,36 @@ function mostrarPresupuestos(mes) {
         const celdaCantidadRestante = fila.insertCell(2);
         celdaCantidadRestante.textContent = `${presupuesto.montoRestante.toFixed(2)}€`;
 
-        // Color de la celda según la cantidad restante
+        // Aplicar colores en la celda de Cantidad Restante
         if (presupuesto.montoRestante > 100) {
-            celdaCantidadRestante.style.backgroundColor = '#CCFFCC';
+            celdaCantidadRestante.style.backgroundColor = '#CCFFCC'; // Verde para cantidades altas
         } else if (presupuesto.montoRestante >= 50) {
-            celdaCantidadRestante.style.backgroundColor = '#FFFFCC';
+            celdaCantidadRestante.style.backgroundColor = '#FFFFCC'; // Amarillo para cantidades medias
         } else {
-            celdaCantidadRestante.style.backgroundColor = '#FFCCCC';
+            celdaCantidadRestante.style.backgroundColor = '#FFCCCC'; // Rojo para cantidades bajas
         }
 
-        fila.insertCell(3).textContent = presupuesto.fechaCreacion;
+        const celdaFecha = fila.insertCell(3);
+        celdaFecha.innerHTML = `<input type="date" value="${presupuesto.fechaCreacion}" onchange="cambiarFechaPresupuesto(${index}, this.value)" />`;
+
         const celdaEliminar = fila.insertCell(4);
         celdaEliminar.innerHTML = `<button onclick="eliminarPresupuesto(${index})">Eliminar</button>`;
     });
 }
 
-function mostrarMovimientos(mes) {
-    const tablaMovimientos = document.getElementById('tabla-gastos').getElementsByTagName('tbody')[0];
-    tablaMovimientos.innerHTML = '';
 
-    let movimientosFiltrados = movimientos;
-    if (mes !== null && mes !== '') {
-        movimientosFiltrados = movimientos.filter(movimiento => new Date(movimiento.fecha).getMonth().toString() === mes);
+function cambiarFechaPresupuesto(index, nuevaFecha) {
+    if (presupuestos[index]) {
+        presupuestos[index].fechaCreacion = nuevaFecha;
+        guardarDatos();
     }
+}
 
-    movimientosFiltrados.forEach((movimiento, index) => {
-        const fila = tablaMovimientos.insertRow();
-        fila.className = movimiento.tipo.toLowerCase();
-        fila.insertCell(0).textContent = movimiento.tipo;
-        fila.insertCell(1).textContent = movimiento.nombrePresupuesto;
-        fila.insertCell(2).textContent = `${movimiento.montoMovimiento.toFixed(2)}€`;
-        fila.insertCell(3).textContent = movimiento.fecha;
-
-        const celdaEliminar = fila.insertCell(4);
-        celdaEliminar.innerHTML = `<button onclick="eliminarMovimiento(${index})">Eliminar</button>`;
-    });
+function cambiarFechaMovimiento(index, nuevaFecha) {
+    if (movimientos[index]) {
+        movimientos[index].fecha = nuevaFecha;
+        guardarDatos();
+    }
 }
 
 function eliminarPresupuesto(index) {
