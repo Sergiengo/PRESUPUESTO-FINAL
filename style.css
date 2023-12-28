@@ -1,0 +1,106 @@
+:root {
+    --color-primary: #5b68df;
+    --color-secondary: #f8f4f4;
+    --color-accent: #ff4081;
+    --color-light: #ffffff;
+    --color-dark: #333333;
+    --font-primary: 'Poppins', sans-serif;
+}
+
+body {
+    font-family: var(--font-primary);
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-secondary);
+    color: var(--color-dark);
+    text-align: center;
+}
+
+h1 {
+    color: var(--color-primary);
+    margin-top: 20px;
+}
+
+h2 {
+    color: var(--color-dark);
+    background-color: var(--color-light);
+    padding: 10px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-top: 30px;
+}
+
+div {
+    background-color: var(--color-light);
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 80%;
+    max-width: 800px;
+}
+
+input, button, select {
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    outline: none;
+}
+
+button {
+    background-color: var(--color-primary);
+    color: var(--color-light);
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: darken(var(--color-primary), 10%);
+}
+
+table {
+    width: 100%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    border-radius: 10px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+thead th {
+    background-color: var(--color-primary);
+    color: var(--color-light);
+}
+
+tbody td {
+    background-color: var(--color-light);
+}
+
+tbody tr:nth-child(even) {
+    background-color: var(--color-secondary);
+}
+
+tr.gasto td {
+    background-color: #ffcccc;
+}
+
+tr.ingreso td {
+    background-color: #ccffcc;
+}
+
+@media (max-width: 768px) {
+    div {
+        width: 95%;
+    }
+}
+
+/* Añadir más estilos personalizados según sea necesario */
