@@ -204,6 +204,12 @@ function mostrarMovimientos(mes = null) {
     movimientosFiltrados.forEach((movimiento, index) => {
         const fila = tablaMovimientos.insertRow();
 
+     if (movimiento.tipo === 'Ingreso') {
+            fila.style.color = 'green';  // Color verde para ingresos
+        } else if (movimiento.tipo === 'Gasto') {
+            fila.style.color = 'red';  // Color rojo para gastos
+        }
+        
         fila.insertCell(0).textContent = movimiento.tipo;
         fila.insertCell(1).textContent = movimiento.nombrePresupuesto;
         fila.insertCell(2).textContent = `${movimiento.montoMovimiento.toFixed(2)}€`;
