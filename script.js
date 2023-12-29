@@ -179,6 +179,7 @@ function cargarDatos() {
     movimientos = datosMovimientos ? JSON.parse(datosMovimientos) : [];
 }
 
+
 function actualizarOpcionesPresupuesto() {
     const selectGasto = document.getElementById('presupuesto-registro-gasto');
     selectGasto.innerHTML = '';
@@ -188,5 +189,29 @@ function actualizarOpcionesPresupuesto() {
         option.value = presupuesto.nombre;
         option.textContent = presupuesto.nombre;
         selectGasto.appendChild(option);
+    });
+}
+
+function mostrarMovimientos(mes = null) {
+    const tablaMovimientos = document.getElementById('tabla-movimientos').getElementsByTagName('tbody')[0];
+    tablaMovimientos.innerHTML = '';
+
+    let movimientosFiltrados = movimientos;
+    if (mes !== null && mes !== '') {
+        movimientosFiltrados = movimientos.filter(m => new Date(m.fecha).getMonth().toString() === mes);
+    }
+
+    movimientosFiltrados.forEach((movimiento, index) => {
+        const fila = tablaMovimientos.insertRow();
+
+        fila.insertCell(0).textContent = movimiento.tipo;
+        fila.insertCell(1).textContent = movimiento.nombrePresupuesto;
+        fila.insertCell(2).textContent = `${movimiento.montoMovimiento.toFixed(2)}€`;
+
+        const celdaFecha = fila.insertCell(3);
+        celdaFecha.innerHTML = `<input type="date" value="${movimiento.fecha}" onchange="cambiarFechaMovimiento(${index}, this.value)" />`;
+
+        const celdaEliminar = fila.insertCell(4);
+        celdaEliminar.innerHTML = `<button onclick="eliminarMovimiento(${index})">Eliminar</button>`;
     });
 }
