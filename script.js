@@ -221,3 +221,20 @@ function mostrarMovimientos(mes = null) {
         celdaEliminar.innerHTML = `<button onclick="eliminarMovimiento(${index})">Eliminar</button>`;
     });
 }
+
+function actualizarInterfaz(mes = null) {
+    mostrarPresupuestos(mes);
+    mostrarMovimientos(mes);
+    actualizarOpcionesPresupuesto();
+    actualizarTotales();
+}
+
+function actualizarTotales() {
+    let totalPresupuesto = presupuestos.reduce((sum, p) => sum + p.montoOriginal, 0);
+    let totalIngresos = movimientos.filter(m => m.tipo === 'Ingreso').reduce((sum, m) => sum + m.montoMovimiento, 0);
+    let totalGastos = movimientos.filter(m => m.tipo === 'Gasto').reduce((sum, m) => sum + m.montoMovimiento, 0);
+
+    document.getElementById('total-presupuesto').textContent = `${totalPresupuesto.toFixed(2)}€`;
+    document.getElementById('total-ingresos').textContent = `${totalIngresos.toFixed(2)}€`;
+    document.getElementById('total-gastos').textContent = `${totalGastos.toFixed(2)}€`;
+}
