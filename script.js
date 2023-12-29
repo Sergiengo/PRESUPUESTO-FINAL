@@ -226,18 +226,23 @@ function actualizarInterfaz(mes = null) {
     mostrarPresupuestos(mes);
     mostrarMovimientos(mes);
     actualizarOpcionesPresupuesto();
-    actualizarTotales();
+    actualizarTotales(mes);
 }
 
-function actualizarTotales() {
-    let totalPresupuesto = presupuestos.reduce((sum, p) => sum + p.montoOriginal, 0);
-    let totalIngresos = movimientos.filter(m => m.tipo === 'Ingreso').reduce((sum, m) => sum + m.montoMovimiento, 0);
-    let totalGastos = movimientos.filter(m => m.tipo === 'Gasto').reduce((sum, m) => sum + m.montoMovimiento, 0);
+function actualizarTotales(mes = null) {
+    let presupuestosFiltrados = presupuestos;
+    let movimientosFiltrados = movimientos;
+
+    if (mes !== null && mes !== '') {
+        presupuestosFiltrados = presupuestos.filter(p => new Date(p.fechaCreacion).getMonth().toString() === mes);
+        movimientosFiltrados = movimientos.filter(m => new Date(m.fecha).getMonth().toString() === mes);
+    }
+
+    let totalPresupuesto = presupuestosFiltrados.reduce((sum, p) => sum + p.montoOriginal, 0);
+    let totalIngresos = movimientosFiltrados.filter(m => m.tipo === 'Ingreso').reduce((sum, m) => sum + m.montoMovimiento, 0);
+    let totalGastos = movimientosFiltrados.filter(m => m.tipo === 'Gasto').reduce((sum, m) => sum + m.montoMovimiento, 0);
 
     document.getElementById('total-presupuesto').textContent = `${totalPresupuesto.toFixed(2)}€`;
     document.getElementById('total-ingresos').textContent = `${totalIngresos.toFixed(2)}€`;
     document.getElementById('total-gastos').textContent = `${totalGastos.toFixed(2)}€`;
 }
-
-
-
